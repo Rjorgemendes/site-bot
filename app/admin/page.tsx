@@ -12,8 +12,10 @@ export default function Admin() {
     setReservas(data);
 
     criarGrafico(data);
+    criarGraficoHora(data);
   }
 
+  // ✅ gráfico por dia
   function criarGrafico(reservas: any[]) {
     const porDia: any = {};
 
@@ -25,7 +27,12 @@ export default function Admin() {
     const ctx = document.getElementById("grafico") as any;
     if (!ctx) return;
 
-    new Chart(ctx, {
+    // 🔴 evitar duplicação
+    if ((window as any).chartDia) {
+      (window as any).chartDia.destroy();
+    }
+
+    (window as any).chartDia = new Chart(ctx, {
       type: "bar",
       data: {
         labels: Object.keys(porDia),
@@ -39,43 +46,105 @@ export default function Admin() {
     });
   }
 
+  // ✅ gráfico por hora
+  function criarGraficoHora(reservas: any[]) {
+    const porHora: any = {};
+
+    reservas.forEach((r) => {
+      if (!porHora[r.hora]) porHora[r.hora] = 0;
+      porHora[r.hora]++;
+    });
+
+    const ctx = document.getElementById("graficoHora") as any;
+    if (!ctx) return;
+
+    if ((window as any).chartHora) {
+      (window as any).chartHora.destroy();
+    }
+
+    (window as any).chartHora = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: Object.keys(porHora),
+        datasets: [
+          {
+            label: "Reservas por hora",
+            data: Object.values(porHora),
+          },
+        ],
+      },
+    });
+  }
+
   useEffect(() => {
     carregar();
   }, []);
 
-  const total = reservas.length;
-
   return (
-    <div style={{ padding: 30 }}>
-
+    <div
+      style={{
+        padding: 30,
+        background: "#f5f5f5",
+        minHeight: "100vh",
+        fontFamily: "Arial"
+      }}
+    >
       <h1>Painel de Reservas 📊</h1>
 
       {/* ✅ CARDS */}
       <div style={{ display: "flex", gap: 20, marginBottom: 30 }}>
-        <div style={{ padding: 20, background: "#111", color: "white" }}>
+        <div
+          style={{
+            padding: 20,
+            background: "#111",
+            color: "white",
+            borderRadius: 10
+          }}
+        >
           <h3>Total Reservas</h3>
-          <h1>{total}</h1>
+          <h1>{reservas.length}</h1>
         </div>
       </div>
 
-      {/* ✅ GRAFICO */}
-      <div style={{
-        background: "white",
-        padding: 20,
-        borderRadius: 10,
-        marginBottom: 30,
-        maxWidth: 700
-      }}>
-        <canvas id="grafico"></canvas>
+      {/* ✅ GRAFICOS */}
+      <div style={{ display: "flex", gap: 40, flexWrap: "wrap" }}>
+
+        <div
+          style={{
+            background: "white",
+            padding: 20,
+            borderRadius: 10,
+            width: 400
+          }}
+        >
+          <h3>Reservas por dia</h3>
+          <canvas id="grafico"></canvas>
+        </div>
+
+        <div
+          style={{
+            background: "white",
+            padding: 20,
+            borderRadius: 10,
+            width: 400
+          }}
+        >
+          <h3>Reservas por hora</h3>
+          <canvas id="graficoHora"></canvas>
+        </div>
+
       </div>
 
       {/* ✅ TABELA */}
-      <table style={{
-        width: "100%",
-        background: "white",
-        borderRadius: 10,
-        overflow: "hidden"
-      }}>
+      <table
+        style={{
+          width: "100%",
+          background: "white",
+          marginTop: 40,
+          borderRadius: 10,
+          overflow: "hidden"
+        }}
+      >
         <thead style={{ background: "#111", color: "white" }}>
           <tr>
             <th>Nome</th>
@@ -98,8 +167,6 @@ export default function Admin() {
           ))}
         </tbody>
       </table>
-
     </div>
   );
 }
-``
