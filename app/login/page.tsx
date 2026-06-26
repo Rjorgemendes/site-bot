@@ -21,7 +21,7 @@ export default function Login() {
     }
   }
 
-  // ✅ REGISTO
+  // ✅ REGISTAR
   async function registar() {
     const { error } = await supabase.auth.signUp({
       email,
@@ -36,56 +36,31 @@ export default function Login() {
   }
 
   return (
-    <div style={{ padding: 40, fontFamily: "Arial" }}>
-      <h1>Login 🔐 ✅</h1>
+    <div style={{ padding: 40 }}>
+      <h1>Login 🔐</h1>
 
-      <div style={{ marginTop: 20 }}>
-        <input
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          style={{ padding: 10, width: 250 }}
-        />
-      </div>
+      <input
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
 
-      <div style={{ marginTop: 10 }}>
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          style={{ padding: 10, width: 250 }}
-        />
-      </div>
+      <br />
+      <br />
 
-      <div style={{ marginTop: 20 }}>
-        <button
-          onClick={entrar}
-          style={{
-            padding: 10,
-            marginRight: 10,
-            background: "#4CAF50",
-            color: "white",
-            border: "none",
-            cursor: "pointer"
-          }}
-        >
-          Entrar
-        </button>
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
 
-        <button
-          onClick={registar}
-          style={{
-            padding: 10,
-            background: "#2196F3",
-            color: "white",
-            border: "none",
-            cursor: "pointer"
-          }}
-        >
-          Criar conta
-        </button>
-      </div>
+      <br />
+      <br />
+
+      <button onClick={entrar}>Entrar</button>
+      <button onClick={registar}>Criar conta</button>
     </div>
   );
 }
+``
