@@ -1,13 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { supabase } from "../../lib/supabase";
+import { supabase } from "../lib/supabase";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // ✅ LOGIN
   async function entrar() {
     const { error } = await supabase.auth.signInWithPassword({
       email,
@@ -15,13 +14,12 @@ export default function Login() {
     });
 
     if (error) {
-      alert("Erro: " + error.message);
+      alert(error.message);
     } else {
       window.location.href = "/admin";
     }
   }
 
-  // ✅ REGISTAR
   async function registar() {
     const { error } = await supabase.auth.signUp({
       email,
@@ -29,7 +27,7 @@ export default function Login() {
     });
 
     if (error) {
-      alert("Erro: " + error.message);
+      alert(error.message);
     } else {
       alert("Conta criada ✅");
     }
@@ -44,9 +42,7 @@ export default function Login() {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
-
-      <br />
-      <br />
+      <br /><br />
 
       <input
         type="password"
@@ -54,13 +50,10 @@ export default function Login() {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-
-      <br />
-      <br />
+      <br /><br />
 
       <button onClick={entrar}>Entrar</button>
       <button onClick={registar}>Criar conta</button>
     </div>
   );
 }
-``
