@@ -18,27 +18,21 @@ export default function Admin() {
     const porDia: any = {};
 
     reservas.forEach((r) => {
-      if (!porDia[r.data]) {
-        porDia[r.data] = 0;
-      }
+      if (!porDia[r.data]) porDia[r.data] = 0;
       porDia[r.data]++;
     });
 
-    const labels = Object.keys(porDia);
-    const valores = Object.values(porDia);
-
     const ctx = document.getElementById("grafico") as any;
-
     if (!ctx) return;
 
     new Chart(ctx, {
       type: "bar",
       data: {
-        labels: labels,
+        labels: Object.keys(porDia),
         datasets: [
           {
             label: "Reservas por dia",
-            data: valores,
+            data: Object.values(porDia),
           },
         ],
       },
@@ -49,19 +43,40 @@ export default function Admin() {
     carregar();
   }, []);
 
+  const total = reservas.length;
+
   return (
     <div style={{ padding: 30 }}>
+
       <h1>Painel de Reservas 📊</h1>
 
-      <button onClick={carregar} style={{ marginBottom: 20 }}>
-        🔄 Atualizar
-      </button>
+      {/* ✅ CARDS */}
+      <div style={{ display: "flex", gap: 20, marginBottom: 30 }}>
+        <div style={{ padding: 20, background: "#111", color: "white" }}>
+          <h3>Total Reservas</h3>
+          <h1>{total}</h1>
+        </div>
+      </div>
 
       {/* ✅ GRAFICO */}
-      <canvas id="grafico" style={{ maxWidth: 600 }} />
+      <div style={{
+        background: "white",
+        padding: 20,
+        borderRadius: 10,
+        marginBottom: 30,
+        maxWidth: 700
+      }}>
+        <canvas id="grafico"></canvas>
+      </div>
 
-      <table style={{ width: "100%", marginTop: 30 }}>
-        <thead>
+      {/* ✅ TABELA */}
+      <table style={{
+        width: "100%",
+        background: "white",
+        borderRadius: 10,
+        overflow: "hidden"
+      }}>
+        <thead style={{ background: "#111", color: "white" }}>
           <tr>
             <th>Nome</th>
             <th>Email</th>
@@ -83,6 +98,8 @@ export default function Admin() {
           ))}
         </tbody>
       </table>
+
     </div>
   );
 }
+``
