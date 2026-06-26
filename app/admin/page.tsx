@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Chart from "chart.js/auto";
 
 export default function Admin() {
   const [reservas, setReservas] = useState<any[]>([]);
@@ -9,17 +10,39 @@ export default function Admin() {
     const res = await fetch("/api/reservas");
     const data = await res.json();
     setReservas(data);
+
+    criarGrafico(data);
   }
 
-  async function apagar(index: number) {
-    await fetch("/api/reservas/delete", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ index })
+  function criarGrafico(reservas: any[]) {
+    const porDia: any = {};
+
+    reservas.forEach((r) => {
+      if (!porDia[r.data]) {
+        porDia[r.data] = 0;
+      }
+      porDia[r.data]++;
     });
-    carregar();
+
+    const labels = Object.keys(porDia);
+    const valores = Object.values(porDia);
+
+    const ctx = document.getElementById("grafico") as any;
+
+    if (!ctx) return;
+
+    new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: "Reservas por dia",
+            data: valores,
+          },
+        ],
+      },
+    });
   }
 
   useEffect(() => {
@@ -34,35 +57,28 @@ export default function Admin() {
         🔄 Atualizar
       </button>
 
-      <table
-        style={{
-          width: "100%",
-          borderCollapse: "collapse",
-          background: "white"
-        }}
-      >
+      {/* ✅ GRAFICO */}
+      <canvas id="grafico" style={{ maxWidth: 600 }} />
+
+      <table style={{ width: "100%", marginTop: 30 }}>
         <thead>
-          <tr style={{ background: "#111", color: "white" }}>
+          <tr>
             <th>Nome</th>
             <th>Email</th>
             <th>Data</th>
             <th>Hora</th>
             <th>Pessoas</th>
-            <th>Ação</th>
           </tr>
         </thead>
 
         <tbody>
           {reservas.map((r, i) => (
-            <tr key={i} style={{ borderBottom: "1px solid #ccc" }}>
+            <tr key={i}>
               <td>{r.nome}</td>
               <td>{r.email}</td>
               <td>{r.data}</td>
               <td>{r.hora}</td>
               <td>{r.pessoas}</td>
-              <td>
-                <button onClick={() => apagar(i)}>🗑</button>
-              </td>
             </tr>
           ))}
         </tbody>
