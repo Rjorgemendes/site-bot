@@ -65,7 +65,6 @@ body{
   padding:20px;
 }
 
-/* FORM */
 form{
   background:#1e293b;
   padding:25px;
@@ -82,6 +81,7 @@ input, button{
 button{
   background:#f59e0b;
   border:none;
+  cursor:pointer;
 }
 </style>
 
@@ -121,32 +121,33 @@ async function reservar() {
 <!-- MENU -->
 <div class="container">
 
-  <h2>Menu</h2>
+  <h2>Menu 🍝</h2>
 
   <div class="grid">
+
     <div class="card">
-      <img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=800" />
+      <img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=800"/>
       <div class="card-content">
         <h3>Massa Italiana</h3>
       </div>
     </div>
 
     <div class="card">
-      <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800" />
+      <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800"/>
       <div class="card-content">
         <h3>Pizza</h3>
       </div>
     </div>
 
     <div class="card">
-      <img src="https://images.unsplash.com/photo-1514516873439-d9d47d5c1a9f?w=800" />
+      <img src="https://images.unsplash.com/photo-1514516873439-d9d47d5c1a9f?w=800"/>
       <div class="card-content">
         <h3>Vinhos</h3>
       </div>
     </div>
+
   </div>
 
-  <!-- RESERVAS -->
   <h2>Reservar Mesa</h2>
 
   <form onsubmit="event.preventDefault(); reservar();">
@@ -168,4 +169,3 @@ async function reservar() {
     headers: { "Content-Type": "application/json" }
   });
 }
-``
